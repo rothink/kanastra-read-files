@@ -29,5 +29,6 @@
       --form =
 
 
-![alt text](https://github.com/rothink/kanastra-read-files/tree/main/public/coverage.png?raw=true)
+![alt text](https://github.com/rothink/kanastra-read-files/blob/main/public/images/coverage.png?raw=true)
 
+![alt text](https://github.com/rothink/kanastra-read-files/blob/main/public/images/workers.png?raw=true)
