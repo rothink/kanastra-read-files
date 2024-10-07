@@ -29,6 +29,9 @@ ifdef filter
 	docker exec -t $(CONTAINER_NAME) ./vendor/bin/phpunit --filter="$(filter)" --stop-on-failure
 endif
 
+test-coverage:
+	docker exec -t $(CONTAINER_NAME)  ./vendor/bin/phpunit --coverage-html cover/
+
 # Entra no bash do container
 bash:
 	docker exec -it $(CONTAINER_NAME) bash

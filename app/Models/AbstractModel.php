@@ -6,13 +6,9 @@ use App\Interfaces\ModelInterface;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Arr;
-use Psy\Util\Str;
 
 class AbstractModel extends Model implements ModelInterface
 {
-//    use HasTenantCounty;
-
     protected $appends = [
         'created_at_to_human',
         'created_at_formated',

@@ -4,8 +4,6 @@ namespace App\Services;
 
 use App\Interfaces\RepositoryInterface;
 use App\Interfaces\ServiceInterface;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Http\Request;
 
 abstract class BaseService implements ServiceInterface
 {

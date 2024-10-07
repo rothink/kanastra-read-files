@@ -20,7 +20,11 @@ class RemessaService extends BaseService
         parent::__construct($this->repository);
     }
 
-    public function upload(UploadedFile $file)
+    /**
+     * @param UploadedFile $file
+     * @return void
+     */
+    public function upload(UploadedFile $file) :void
     {
         $name = $file->getClientOriginalName();
         $path = "/remessa/" . $name;
@@ -116,6 +120,9 @@ class RemessaService extends BaseService
         return true;
     }
 
+    /**
+     * @return bool|null
+     */
     public function fileToDatabase(): bool|null
     {
         Log::info('Buscando arquivos..' . Carbon::now());
@@ -126,21 +133,24 @@ class RemessaService extends BaseService
         }
         Log::info(count($files) . ' remessa(s) encontrada(s).');
         foreach ($files as $file) {
-            $skip = 0;
-            $storageFile = storage_path("app/" . $file);
-            SimpleExcelReader::create($storageFile)
-                ->useDelimiter(',')
-                ->useHeaders(['name', 'governmentId', 'email', 'debtAmount', 'debtDueDate', 'debtID'])
-                ->getRows()
-                ->skip($skip)
-                ->take(100) //limite para teste local
-                ->each(
-                    function ($row) use ($skip) {
-                        $this->saveRemessa($row);
-                        $skip += 1000;
-                    }
-                );
-
+            try {
+                $skip = 0;
+                $storageFile = storage_path("app/" . $file);
+                SimpleExcelReader::create($storageFile)
+                    ->useDelimiter(',')
+                    ->useHeaders(['name', 'governmentId', 'email', 'debtAmount', 'debtDueDate', 'debtID'])
+                    ->getRows()
+                    ->skip($skip)
+                    ->take(100) //limite para teste local
+                    ->each(
+                        function ($row) use ($skip) {
+                            $this->saveRemessa($row);
+                            $skip += 1000;
+                        }
+                    );
+            } catch (\Exception $exception) {
+                Log::warning('Erro ao salvar arquivo ' . $file);
+            }
         }
         Log::info('removendo remessas');
         foreach ($files as $file) {

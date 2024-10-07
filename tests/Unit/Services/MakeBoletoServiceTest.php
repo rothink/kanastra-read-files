@@ -2,22 +2,11 @@
 
 namespace Tests\Unit\Services;
 
-use App\Http\Controllers\RemessaController;
-use App\Http\Requests\CreateUploadFormRequest;
 use App\Models\Remessa;
-use App\Repositories\RemessaRepository;
 use App\Services\MakeBoletoService;
-use App\Services\RemessaService;
-use App\Services\SendEmailService;
-use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use Illuminate\Http\UploadedFile;
-use Illuminate\Pagination\LengthAwarePaginator;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
-use Mockery\MockInterface;
 use Tests\TestCase;
-use Mockery;
 
 class MakeBoletoServiceTest extends TestCase
 {

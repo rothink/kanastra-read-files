@@ -5,12 +5,10 @@ namespace Tests\Unit\Controllers;
 use App\Http\Controllers\RemessaController;
 use App\Http\Requests\CreateUploadFormRequest;
 use App\Services\RemessaService;
-use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Http\UploadedFile;
 use Mockery\MockInterface;
 use Tests\TestCase;
-use Mockery;
 
 class UploadRemessaControllerTest extends TestCase
 {

@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Models\Remessa;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class RemessaRepository extends BaseRepository
 {
@@ -28,7 +29,7 @@ class RemessaRepository extends BaseRepository
         ];
     }
 
-    public function getAllBoletoNotMake()
+    public function getAllBoletoNotMake(): LengthAwarePaginator
     {
         return $this
             ->model
@@ -38,7 +39,7 @@ class RemessaRepository extends BaseRepository
 
     }
 
-    public function getAllEmailNotSendAndBoletoMaked()
+    public function getAllEmailNotSendAndBoletoMaked(): LengthAwarePaginator
     {
         return $this
             ->model

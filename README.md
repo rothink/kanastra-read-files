@@ -18,6 +18,9 @@
 - Executar os testes
   >make test
 
+- Executar os testes com coverage
+  >make test-coverage
+
 - cUrl para inserir arquivo
   >curl --request POST \
       --url http://localhost/api/upload \

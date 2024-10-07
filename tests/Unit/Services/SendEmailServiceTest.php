@@ -2,22 +2,11 @@
 
 namespace Tests\Unit\Services;
 
-use App\Http\Controllers\RemessaController;
-use App\Http\Requests\CreateUploadFormRequest;
 use App\Models\Remessa;
-use App\Repositories\RemessaRepository;
-use App\Services\MakeBoletoService;
-use App\Services\RemessaService;
 use App\Services\SendEmailService;
-use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use Illuminate\Http\UploadedFile;
-use Illuminate\Pagination\LengthAwarePaginator;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
-use Mockery\MockInterface;
 use Tests\TestCase;
-use Mockery;
 
 class SendEmailServiceTest extends TestCase
 {
@@ -25,7 +14,7 @@ class SendEmailServiceTest extends TestCase
     /**
      * @group send-email-in-service
      */
-    public function testMakeBoleto(): void
+    public function testSendEmail(): void
     {
         $params = $this->makeParams();
 
@@ -49,10 +38,30 @@ class SendEmailServiceTest extends TestCase
         $this->assertTrue($response);
     }
 
+    public function testSendEmailWithNoFile(): void
+    {
+        $params = $this->makeParams();
+
+        $fileUploadRemessa = UploadedFile::fake()
+            ->createWithContent('boleto-maked/' . $params['debtID'], json_encode($this->makeParams()));
+
+        Storage::shouldReceive('disk')
+            ->andReturnSelf();
+
+        Storage::shouldReceive('get')
+            ->withAnyArgs()
+            ->andReturn([]);
+
+        $service = app()->make(SendEmailService::class);
+
+        $response = $service->sendEmail(new Remessa($params));
+        $this->assertFalse($response);
+    }
+
     /**
      * @group send-email-in-service-exception
      */
-    public function testMakeBoletoException(): void
+    public function testSendEmailException(): void
     {
         $params = $this->makeParams();
 
@@ -74,7 +83,5 @@ class SendEmailServiceTest extends TestCase
 
         $response = $service->sendEmail(new Remessa($params));
         $this->assertFalse($response);
-
-
     }
 }

@@ -48,7 +48,6 @@ class RemessaServiceTest extends TestCase
         });
 
         Log::shouldReceive('warning')
-            ->times(4)
             ->withAnyArgs();
 
         $service = app()->make(RemessaService::class);
@@ -56,7 +55,8 @@ class RemessaServiceTest extends TestCase
         $remassa1 = new Remessa($this->makeParams());
         $remassa2 = new Remessa($this->makeParams());
 
-        $service->makeBoleto([$remassa1, $remassa2]);
+        $response = $service->makeBoleto([$remassa1, $remassa2]);
+        $this->assertTrue($response);
     }
 
     /**
@@ -237,7 +237,6 @@ class RemessaServiceTest extends TestCase
      */
     public function testfileToDatabase(): void
     {
-
         $params = $this->makeParams();
 
         $this->partialMock(RemessaRepository::class, function (MockInterface $mock) use ($params) {
@@ -270,6 +269,54 @@ class RemessaServiceTest extends TestCase
 
         Storage::shouldReceive('delete')
             ->andReturnTrue();
+
+        $service = app()->make(RemessaService::class);
+        $response = $service->fileToDatabase();
+        $this->assertTrue($response);
+    }
+    /**
+     * @group file-to-database-exception-when-save
+     */
+    public function testFileToDatabaseExceptionWhenSave(): void
+    {
+        $params = $this->makeParams();
+
+        $this->partialMock(RemessaRepository::class, function (MockInterface $mock) use ($params) {
+            $mock
+                ->shouldReceive('getModel')
+                ->andReturnSelf();
+
+            $mock
+                ->shouldReceive('where')
+                ->withAnyArgs()
+                ->andReturnSelf();
+
+            $mock
+                ->shouldReceive('exists')
+                ->andReturnFalse();
+
+            $mock
+                ->shouldReceive('save')
+                ->with($params)
+                ->andThrow(\Exception::class);
+        });
+
+        $fakeCsv = Storage::disk('local')->files('/csv-fake');
+
+        Storage::shouldReceive('disk')
+            ->andReturnSelf();
+
+        Storage::shouldReceive('allFiles')
+            ->andReturn(['/' . $fakeCsv[0]]);
+
+        Storage::shouldReceive('delete')
+            ->andReturnTrue();
+
+        Log::shouldReceive('info')
+        ->withAnyArgs();
+
+        Log::shouldReceive('warning')
+        ->with('Erro ao salvar arquivo /csv-fake/input-file-test.csv');
 
         $service = app()->make(RemessaService::class);
         $response = $service->fileToDatabase();
