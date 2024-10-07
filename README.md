@@ -1,31 +1,25 @@
 # Passo a passo back - report
 
 - Clonar repositório
-  >
-        git clone https://github.com/rothink/kanastra-read-files.git
+  > git clone https://github.com/rothink/kanastra-read-files.git
 
 
 - Entrar no repositório clonado
-  >
-        cd kanastra-read-files
+  >cd kanastra-read-files
 
 
 - Subir os serviços com docker e instalar as dependências
-  >
-        make install
+
+  > make install    
 
 - Sobe os workes
-  >
-        make worker
+  > make worker
 
 - Executar os testes
-  >
-        make test
-
+  >make test
 
 - cUrl para inserir arquivo
-  >
-        curl --request POST \
+  >curl --request POST \
       --url http://localhost/api/upload \
       --header 'Content-Type: multipart/form-data' \
       --form 'input=@{caminho-para-o-arquivo}.csv' \

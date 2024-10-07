@@ -49,6 +49,14 @@ services:
                 - '-p${DB_PASSWORD}'
             retries: 3
             timeout: 5s
+        depends_on:
+            -   kanstra.composer
+    kanstra.composer:
+        container_name: kanastra.composer
+        image: composer
+        volumes:
+            - ./:/app
+        command: composer install --ignore-platform-reqs
 networks:
     sail:
         driver: bridge

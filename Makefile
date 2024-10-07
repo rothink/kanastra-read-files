@@ -4,12 +4,15 @@ CONTAINER_NAME=kanastra.app
 install:
 	make build
 	make up
+	make composer
 	make clear
-	make migration
 
 build:
 	docker compose build
 # Sobe o sistema
+composer:
+	docker exec -t $(CONTAINER_NAME) composer install
+
 up:
 	docker compose up -d
 
@@ -25,15 +28,6 @@ test-filter:
 ifdef filter
 	docker exec -t $(CONTAINER_NAME) ./vendor/bin/phpunit --filter="$(filter)" --stop-on-failure
 endif
-
-
-# Rodas as migrations e limpa o banco
-migration:
-	docker exec -it $(CONTAINER_NAME) php artisan migrate:fresh
-
-# Roda os as migrations, limpa o banco e popula
-migration-seed:
-	docker exec -it $(CONTAINER_NAME) php artisan migrate:fresh --seed
 
 # Entra no bash do container
 bash:
