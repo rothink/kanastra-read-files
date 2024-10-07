@@ -28,4 +28,6 @@
       --form 'input=@{caminho-para-o-arquivo}.csv' \
       --form =
 
-        
+
+![alt text](https://github.com/rothink/kanastra-read-files/tree/main/public/coverage.png?raw=true)
+
